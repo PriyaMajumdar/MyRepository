@@ -12,23 +12,32 @@ public class ExpceptionController {
 	}
 	@ExceptionHandler(value = PasswordNotMatch.class)
     public ResponseEntity<Object> exception2(PasswordNotMatch exception) {
-		return new ResponseEntity<>("Password  is not match to the confim Password ", HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>("Password  is not match to the confim Password ", HttpStatus.RESET_CONTENT);
 	}
 	@ExceptionHandler(value = EmailFormat.class)
     public ResponseEntity<Object> exception3(EmailFormat exception) {
-		return new ResponseEntity<>("Email format is not correct ", HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>("Email format is not correct ", HttpStatus.NOT_ACCEPTABLE);
 	}
 	@ExceptionHandler(value = SameCompanyName.class)
     public ResponseEntity<Object> exception4(SameCompanyName exception) {
-		return new ResponseEntity<>("Company name is duplicate it must be unique ", HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>("Company name is duplicate it must be unique ", HttpStatus.NOT_ACCEPTABLE);
 	}
 
 	@ExceptionHandler(value = IdNotFound.class)
     public ResponseEntity<Object> exception5(IdNotFound exception) {
-		return new ResponseEntity<>("Id is not Found ", HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>("Id is not Found ", HttpStatus.ALREADY_REPORTED);
 	}
 
+
+	@ExceptionHandler(value = SameEmailId.class)
+    public ResponseEntity<Object> exception5(SameEmailId exception) {
+		return new ResponseEntity<>("EmailId already exist , I must be unique ", HttpStatus.ALREADY_REPORTED);
+	}
 	
+	@ExceptionHandler(value = UnAuthorisedAccess.class)
+    public ResponseEntity<Object> exception5(UnAuthorisedAccess exception) {
+		return new ResponseEntity<>("May be username and passworn would be wrong ", HttpStatus.UNAUTHORIZED);
+	}
 
 
 }

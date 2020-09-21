@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.microservice1.NullFeild;
 import com.microservice1.model.Employee;
+import com.microservice1.model.Signup;
+import com.microservice1.model.UserLogin;
 import com.microservice1.service.Service1;
 
 @RestController
@@ -25,33 +27,44 @@ import com.microservice1.service.Service1;
 public class Controller1 {
 	@Autowired
 	Service1 service;
+	@Autowired
+	UserLogin ul;
 
 	@PostMapping("account")
-	public ResponseEntity<String> saveRequest(@RequestBody Employee emp) {
-		System.out.println(emp.getName());
-		service.saveEmployee(emp);
-		String str = "Inserted";
-		System.out.println(str);
-		return new ResponseEntity<String>(str, HttpStatus.OK);
+	public ResponseEntity<String> saveRequest(@RequestBody Signup emp) {
+		
+		
+		
+	
+		service.saveEmployee(emp , ul);
+	
+		
+		return new ResponseEntity<String>("Account is created", HttpStatus.CREATED);
 
 	}
 
-	@GetMapping("accounts")
-	public ResponseEntity<List<Employee>> getEmployeeList() {
-		service.getEmployeeList();
-		List li = service.getEmployeeList();
-		return new ResponseEntity<List<Employee>>(li, HttpStatus.OK);
-
-	}
-
-	@GetMapping("account/{id}")
-	public ResponseEntity<Employee> getEmployeeList(@PathVariable int id) {
+		@GetMapping("account/{id}")
+	public ResponseEntity<Employee> getSingleEmployee(@PathVariable int id) {
 		System.out.println("idCheck" + id);
 		Employee emp = service.getEmployeeById(id);
 
-		return new ResponseEntity<Employee>(emp, HttpStatus.OK);
+		return new ResponseEntity<Employee>(emp, HttpStatus.FOUND);
 
 	}
+		
+		
+		
+		
+		@PostMapping("accountlogin")
+		public ResponseEntity<Employee> userLogin(@RequestBody UserLogin ul1) {
+			
+          Employee emp = service.userLoginVerificatio(ul);
+          
+          System.out.println("check 30");
+			
+		return	new ResponseEntity<Employee>(emp, HttpStatus.FOUND);
+		}
+
 
 	@PutMapping("account")
 	public ResponseEntity<String> updateEmployee(@RequestBody Employee emp) {
