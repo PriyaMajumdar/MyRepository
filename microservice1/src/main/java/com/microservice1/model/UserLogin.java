@@ -22,8 +22,7 @@ public class UserLogin {
 
     
 	@Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-     int id;
+    int id;
 	
     
   @Column(unique=true)

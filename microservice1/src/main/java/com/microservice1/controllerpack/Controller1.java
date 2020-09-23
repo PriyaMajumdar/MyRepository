@@ -58,7 +58,7 @@ public class Controller1 {
 		@PostMapping("accountlogin")
 		public ResponseEntity<Employee> userLogin(@RequestBody UserLogin ul1) {
 			
-          Employee emp = service.userLoginVerificatio(ul);
+          Employee emp = service.userLoginVerificatio(ul1);
           
           System.out.println("check 30");
 			

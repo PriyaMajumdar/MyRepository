@@ -45,11 +45,13 @@ public class Dao1imp implements Dao1 {
 
 			cs.flush();
 			cs.clear();
+			System.out.println("Check 79");
 
 			Query<UserLogin> q1 = cs.createQuery("from UserLogin", UserLogin.class);
 			List<UserLogin> li1 = q1.getResultList();
 			Iterator<UserLogin> it1 = li1.iterator();
 			while (it1.hasNext()) {
+				System.out.println("check : 80 , userlogin data");
 
 				UserLogin user = it1.next();
 				if (user.getEmailid().equals(ul.getEmailid())) {
@@ -63,21 +65,37 @@ public class Dao1imp implements Dao1 {
 
 			cs.flush();
 			cs.clear();
+			System.out.println("check:" + e.getName());
 			cs.save(e);
 
 			System.out.println("Employee is save");
 			cs.flush();
 			cs.clear();
+
+			String sql = "select * from employeedata where emailid=" + "'" + e.getEmailid() + "'";
+
+			System.out.println("Check 81");
+
+			Query<Employee> q3 = cs.createNativeQuery(sql, Employee.class);
+			List<Employee> li2 = q3.getResultList();
+			Iterator<Employee> it2 = li2.iterator();
+			if (it2.hasNext()) {
+				System.out.println("check 40");
+
+				e = it2.next();
+				System.out.println("check 50");
+
+			}
+			ul.setId(e.getId());
+
 			cs.save(ul);
 
 		} catch (SameCompanyName scn) {
 			throw new SameCompanyName();
 
-		}
-		catch(SameEmailId ex) {
+		} catch (SameEmailId ex) {
 			throw new SameEmailId();
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			throw new NullFeild();
 		}
 
@@ -141,81 +159,63 @@ public class Dao1imp implements Dao1 {
 	@Override
 	public Employee userLoginVerification(UserLogin ul) {
 		// TODO Auto-generated method stub
-		
+
 		Employee e2 = null;
-		if(ul.getEmailid()!= null && ul.getPassword()!=null) {
+		if (ul.getEmailid() != null && ul.getPassword() != null) {
 			String password = ul.getPassword();
 			Session cs = em.unwrap(Session.class);
 			String eid1 = ul.getEmailid();
-		    //String sql = "select * from employeelogin where emailid="+"'eid1'";
-			String sql = "select * from employeelogin where emailid="+"'"+eid1+"'";
 			
-			Query<UserLogin> q3 = cs.createNativeQuery(sql,UserLogin.class);
+			String sql = "select * from employeelogin where emailid=" + "'" + eid1 + "' and password = " + "'"
+					+ password + "'";
+
+			Query<UserLogin> q3 = cs.createNativeQuery(sql, UserLogin.class);
+
 			
-			//UserLogin emp = cs.get(UserLogin.class,ul.getEmailid() );
-			UserLogin ul2 =null;
-			
+			UserLogin ul2 = null;
+
 			List<UserLogin> li = q3.getResultList();
 			Iterator<UserLogin> it = li.iterator();
 			while (it.hasNext()) {
 				System.out.println("check 10");
-				
-				 ul2 =  it.next();
+
+				ul2 = it.next();
 				System.out.println("check 20");
-				
-				
+
 			}
-			
-			
-			System.out.println(ul2.getEmailid());
-			System.out.println(ul2.getPassword());
+
 			cs.flush();
 			cs.clear();
 			System.out.println("check 15");
-			/*if(ul.getPassword().equals(ul2.getPassword()) && ul.getEmailid().equals(ul2.getEmailid())) */
-			if(ul2!=null){
-			String eid =	ul2.getEmailid();
-				
-				//String sql2 = "select * from employeedata where emailid="+"'eid'";
-			String sql2 ="select * from employeedata where emailid="+"'"+eid+"'";
+
+			if (ul2 != null) {
+				String eid = ul2.getEmailid();
+
+				String sql2 = "select * from employeedata where emailid=" + "'" + eid + "'";
 				System.out.println("check 11");
-				
-				Query<Employee> q2 = cs.createNativeQuery(sql2,Employee.class);
+
+				Query<Employee> q2 = cs.createNativeQuery(sql2, Employee.class);
 				List<Employee> li2 = q2.getResultList();
 				Iterator<Employee> it2 = li2.iterator();
 				while (it2.hasNext()) {
 					System.out.println("Check 25");
-					
-					e2 =  it2.next();
+
+					e2 = it2.next();
 				}
-				
-				//e2 = cs.get(Employee.class, emp.getEmailid());
-			}
-			else {
+
+			} else {
 				System.out.println("check 12");
 				throw new UnAuthorisedAccess();
-				
+
 			}
-			
-		
-			
-			
-			
-			
-		}
-		else {
+
+		} else {
 			throw new NullFeild();
-		
+
 		}
-		
-		
+
 		return e2;
-		
-		
-		
-		
-		
-		
+
 	}
 
 }
