@@ -13,10 +13,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.microservice1.NullFeild;
+import com.microservice1.model.CreateBean;
 import com.microservice1.model.Employee;
 import com.microservice1.model.Signup;
 import com.microservice1.model.UserLogin;
@@ -29,6 +31,8 @@ public class Controller1 {
 	Service1 service;
 	@Autowired
 	UserLogin ul;
+	@Autowired
+	CreateBean decode;
 
 	@PostMapping("account")
 	public ResponseEntity<String> saveRequest(@RequestBody Signup emp) {
@@ -56,11 +60,16 @@ public class Controller1 {
 		
 		
 		@PostMapping("accountlogin")
-		public ResponseEntity<Employee> userLogin(@RequestBody UserLogin ul1) {
+		public ResponseEntity<Employee> userLogin(@RequestHeader String Authorization) {
+			System.out.println("Header="+ Authorization);
+		UserLogin ul1 =	 decode.decodeAuthorization(Authorization);
+		
+		System.out.println(ul1.getEmailid()+""+ul1.getPassword());
+		
 			
           Employee emp = service.userLoginVerificatio(ul1);
           
-          System.out.println("check 30");
+          
 			
 		return	new ResponseEntity<Employee>(emp, HttpStatus.FOUND);
 		}

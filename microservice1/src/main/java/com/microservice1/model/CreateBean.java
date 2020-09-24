@@ -4,7 +4,9 @@ package com.microservice1.model;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -14,6 +16,15 @@ import org.springframework.stereotype.Service;
 @Configuration
 @Service
 public class CreateBean {
+	@Autowired
+	UserLogin ul1;
+	
+	
+	
+	
+	
+	
+	
 	@Bean
 	public PasswordEncoder  get() {
 		return new BCryptPasswordEncoder();
@@ -59,7 +70,39 @@ public class CreateBean {
 		
 	}
 	
+	public UserLogin decodeAuthorization(String Authorization) {
+		
+		String username_and_password = Authorization.substring(6);
+		Base64.Decoder dec = Base64.getDecoder();
+		String decoded = new String(dec.decode(username_and_password));
+		
+		int seprator =	decoded.indexOf(':');
+		String emailid = decoded.substring(0, seprator);
+		seprator++;
+		 String password = decoded.substring(seprator);
+		   
+		   System.out.println("emailid===="+emailid);
+		   System.out.println("password===="+password);
+		   
+		ul1.setEmailid(emailid);
+		ul1.setPassword(password);
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	          
+	return ul1;
 	
+	
+	
+	}
 	
 	
 	
